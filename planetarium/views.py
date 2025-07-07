@@ -1,4 +1,6 @@
 from django.db.models import F, Count
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets, mixins, status
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -41,6 +43,18 @@ class AstronomyShowViewSet(
 
         return queryset.distinct()
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "title",
+                type=OpenApiTypes.STR,
+                description="Filter by movie title (ex. ?title=fiction)",
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class PlanetariumDomeViewSet(
     mixins.ListModelMixin,
@@ -79,4 +93,3 @@ class ShowSessionViewSet(
             return ShowSessionDetailSerializer
 
         return ShowSessionSerializer
-
