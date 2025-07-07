@@ -2,9 +2,9 @@ from rest_framework import viewsets, mixins, status
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from planetarium.models import ShowTheme, AstronomyShow
+from planetarium.models import ShowTheme, AstronomyShow, PlanetariumDome
 from planetarium.permissions import IsAdminOrIfAuthenticatedReadOnly
-from planetarium.serializers import ShowThemeSerializer, AstronomyShowSerializer
+from planetarium.serializers import ShowThemeSerializer, AstronomyShowSerializer, PlanetariumDomeSerializer
 
 
 class ShowThemeViewSet(
@@ -38,3 +38,14 @@ class AstronomyShowViewSet(
             queryset = queryset.filter(theme__name__icontains=theme)
 
         return queryset.distinct()
+
+
+class PlanetariumDomeViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = PlanetariumDome.objects.all()
+    serializer_class = PlanetariumDomeSerializer
+    permission_classes = ()
