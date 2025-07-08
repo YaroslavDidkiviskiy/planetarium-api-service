@@ -1,6 +1,11 @@
+import os
+import uuid
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.text import slugify
+
 
 
 class ShowTheme(models.Model):
@@ -10,10 +15,17 @@ class ShowTheme(models.Model):
         return self.name
 
 
+def astronomy_show_file_path(instance, filename):
+    _, extension = os.path.splitext(filename)
+    filename = f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
+
+    return os.path.join("uploads/movies/", filename)
+
 class AstronomyShow(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     theme = models.ManyToManyField(ShowTheme, related_name="astronomy_shows")
+    image = models.ImageField(null=True, upload_to=astronomy_show_file_path)
 
 
     def __str__(self):
