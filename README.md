@@ -58,16 +58,9 @@ Swagger UI: http://localhost:8000/api/schema/swagger-ui/
 Redoc: http://localhost:8000/api/schema/redoc/
 
 🗂 Project Structure
-text
-planetarium-api-service/
-├── docker-compose.yml
-├── Dockerfile
-├── .env.example
-├── requirements.txt
-├── manage.py
-├── user/               # Custom user app
-├── planetarium/        # Main app (shows, sessions)
-└── media/              # Uploaded files
+![image](https://github.com/user-attachments/assets/b07db50a-bfb1-4de4-bc1a-0bad722631b2)
+
+
 🐳 Docker Commands Cheat Sheet
 Command	Description
 docker-compose up -d	Start containers
