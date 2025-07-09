@@ -12,7 +12,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from planetarium.models import ShowTheme, AstronomyShow, PlanetariumDome, ShowSession, Reservation
 from planetarium.permissions import IsAdminOrIfAuthenticatedReadOnly
 from planetarium.serializers import ShowThemeSerializer, AstronomyShowSerializer, PlanetariumDomeSerializer, \
-    ShowSessionSerializer, ShowSessionListSerializer, ShowSessionDetailSerializer, ReservationSerializer, ReservationListSerializer
+    ShowSessionSerializer, ShowSessionListSerializer, ShowSessionDetailSerializer, ReservationSerializer, \
+    ReservationListSerializer, AstronomyShowListSerializer, AstronomyShowDetailSerializer, AstronomyShowImageSerializer
 
 
 class ShowThemeViewSet(
@@ -23,7 +24,6 @@ class ShowThemeViewSet(
     queryset = ShowTheme.objects.all()
     serializer_class = ShowThemeSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
-    authentication_classes = (JWTAuthentication,)
 
 
 class AstronomyShowViewSet(
@@ -34,7 +34,20 @@ class AstronomyShowViewSet(
 ):
     queryset = AstronomyShow.objects.prefetch_related("theme")
     serializer_class = AstronomyShowSerializer
-    permission_classes = ()
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return AstronomyShowListSerializer
+
+        if self.action == "retrieve":
+            return AstronomyShowDetailSerializer
+
+        if self.action == "upload_image":
+            return AstronomyShowImageSerializer
+
+        return AstronomyShowSerializer
+
 
     def get_queryset(self):
         """Retrieve the movies with filters"""
@@ -52,6 +65,7 @@ class AstronomyShowViewSet(
         detail=True,
         url_path="upload-image",
         permission_classes=[IsAdminUser],
+        serializer_class=AstronomyShowImageSerializer,
     )
     def upload_image(self, request, pk=None):
         """Endpoint for uploading image to specific movie"""
@@ -69,7 +83,7 @@ class AstronomyShowViewSet(
             OpenApiParameter(
                 "title",
                 type=OpenApiTypes.STR,
-                description="Filter by movie title (ex. ?title=fiction)",
+                description="Filter by astronomy show title (ex. ?title=Space)",
             ),
         ]
     )
@@ -85,7 +99,7 @@ class PlanetariumDomeViewSet(
 ):
     queryset = PlanetariumDome.objects.all()
     serializer_class = PlanetariumDomeSerializer
-    permission_classes = ()
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
 
 class ShowSessionViewSet(
@@ -105,7 +119,7 @@ class ShowSessionViewSet(
         )
     )
     serializer_class = ShowSessionSerializer
-    permission_classes = ()
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
 
     def get_serializer_class(self):
@@ -145,4 +159,3 @@ class ReservationViewSet(
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
