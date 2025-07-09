@@ -1,8 +1,4 @@
 Planetarium API Service 🌌
-https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white
-https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white
-https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white
-https://img.shields.io/badge/django%2520rest-ff1709?style=for-the-badge&logo=django&logoColor=white
 
 A RESTful API for managing planetarium shows, ticket bookings, and astronomical events.
 
@@ -31,7 +27,9 @@ Python 3.11+
 bash
 git clone https://github.com/YaroslavDidkiviskiy/planetarium-api-service.git
 cd planetarium-api-service
-2. Configure Environment
+pip install -r requirements.xtx
+
+3. Configure Environment
 bash
 cp .env.example .env
 Edit .env with your credentials:
@@ -43,6 +41,7 @@ POSTGRES_PASSWORD=your_secure_password
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
 3. Start Services
+docker should be installed
 bash
 docker-compose up --build -d
 4. Apply Migrations
